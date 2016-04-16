@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>matteoruina.com</title>
+    <link>http://matteoruina.com/</link>
+    <description>Recent content on matteoruina.com</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Matteo Ruina</copyright>
+    <lastBuildDate>Wed, 13 Apr 2016 09:20:18 +0100</lastBuildDate>
+    <atom:link href="http://matteoruina.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>GPG</title>
+      <link>http://matteoruina.com/2016/04/13/gpg/</link>
+      <pubDate>Wed, 13 Apr 2016 09:20:18 +0100</pubDate>
+      
+      <guid>http://matteoruina.com/2016/04/13/gpg/</guid>
+      <description>
+
+&lt;h3 id=&#34;backup:bb2ce0876885b03bc553b409313dcb30&#34;&gt;Backup&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;gpg -a --export &amp;quot;${KEY_ID}&amp;quot; &amp;gt; public.key
+gpg -a --export-secret-keys &amp;quot;${KEY_ID}&amp;quot; &amp;gt; private.key
+gpg --export-ownertrust &amp;gt; ownertrust.txt
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;import-private-key:bb2ce0876885b03bc553b409313dcb30&#34;&gt;Import private key&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;gpg --allow-secret-key-import --import private.key
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;sign-git-commit:bb2ce0876885b03bc553b409313dcb30&#34;&gt;Sign git commit&lt;/h3&gt;
+
+&lt;p&gt;To set all commits for a repository to be signed by default, in Git versions 2.0.0 and above, run &lt;code&gt;git config commit.gpgsign true&lt;/code&gt;. To set all commits in any local repository on your computer to be signed by default, run &lt;code&gt;git config --global commit.gpgsign true&lt;/code&gt;.&lt;br /&gt;
+To sign a commit run &lt;code&gt;git commit -S -m &amp;quot;${COMMIT_MESSAGE}&amp;quot;&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
