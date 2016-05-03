@@ -16,7 +16,9 @@ The key can be set via the encrypt parameter: the value of this setting is a con
 The key must be 16-bytes, Base64 encoded. As a convenience, Consul provides the `consul keygen` commmand to generate a key.  
 The key **must** be used on both servers and clients; this will prevent rogue consul client to join you server cluster.  
 
-The provided key is automatically persisted to the data directory and loaded automatically whenever the agent is restarted. This means that to encrypt Consul's gossip protocol, this option only needs to be provided once on each agent's initial startup sequence. If it is provided after Consul has been initialized with an encryption key, then the provided key is ignored and a warning will be displayed.
+The provided key is automatically persisted to the data directory and loaded automatically whenever the agent is restarted. This means that to encrypt Consul's gossip protocol, this option only needs to be provided once on each agent's initial startup sequence. If it is provided after Consul has been initialized with an encryption key, then the provided key is ignored and a warning will be displayed. To enable encryption then, the `serf` folder need to be deleted.
+
+The key is stored in `"${CONSUL_DATA_DIR}"/serf/local.keyring`.
 
 # Troubleshooting
 **Join a cluster with the wrong encryption key**
@@ -27,7 +29,7 @@ The provided key is automatically persisted to the data directory and loaded aut
 ==> EOF
 ```
 
-# Links
+# Sources
 - [https://www.consul.io](https://www.consul.io)
 - [https://www.mauras.ch/securing-consul.html](https://www.mauras.ch/securing-consul.html)
 - [https://github.com/hashicorp/consul/issues/1013](https://github.com/hashicorp/consul/issues/1013)
