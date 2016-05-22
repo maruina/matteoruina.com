@@ -60,7 +60,9 @@ This only applies to services that want to listen on a port. Batch jobs or servi
 
 # Snippets
 **Read stdout and stderr**
-`nomad fs cat "${ALLOC_ID}" alloc/logs/"${TASK_NAME}".stderr.0`
+```bash
+nomad fs cat "${ALLOC_ID}" alloc/logs/"${TASK_NAME}".stderr.0
+```
 
 **Manage jobs**
 ```bash
@@ -69,7 +71,6 @@ nomad run -verbose test_nomad
 nomad status "${JOB_NAME}"
 # Pick an ID in the Allocations output, match it with the Node ID
 # On the Node
-
 ```
 
 
