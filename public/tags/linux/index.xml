@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on matteoruina.com</title>
+    <link>http://matteoruina.com/tags/linux/</link>
+    <description>Recent content in Linux on matteoruina.com</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Matteo Ruina</copyright>
+    <lastBuildDate>Thu, 12 May 2016 09:20:18 +0100</lastBuildDate>
+    <atom:link href="http://matteoruina.com/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Linux performance and troubleshooting handbook</title>
+      <link>http://matteoruina.com/2016/05/12/linux-performance/</link>
+      <pubDate>Thu, 12 May 2016 09:20:18 +0100</pubDate>
+      
+      <guid>http://matteoruina.com/2016/05/12/linux-performance/</guid>
+      <description>
+
+&lt;h1 id=&#34;tools:018bfb4d91cc3bbf82cc682161834852&#34;&gt;Tools&lt;/h1&gt;
+
+&lt;h2 id=&#34;atop:018bfb4d91cc3bbf82cc682161834852&#34;&gt;atop&lt;/h2&gt;
+
+&lt;p&gt;View the contents of a file interactively&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;atop -r &amp;quot;${ATOP_FILE}&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Show the next sample from the file &lt;code&gt;t&lt;/code&gt;
+Show the previous sample from the file &lt;code&gt;T&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;command-line:018bfb4d91cc3bbf82cc682161834852&#34;&gt;Command line&lt;/h2&gt;
+
+&lt;p&gt;Top 10 process by memory usage in Mb&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;ps -eo size,pid,user,command --sort -size | awk &#39;{ hr=$1/1024 ; printf(&amp;quot;%13.2f Mb &amp;quot;,hr) } { for ( x=4 ; x&amp;lt;=NF ; x++ ) { printf(&amp;quot;%s &amp;quot;,$x) } print &amp;quot;&amp;quot; }&#39; | head -n 10
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

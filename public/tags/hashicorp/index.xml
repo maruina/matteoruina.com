@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hashicorp on matteoruina.com</title>
+    <link>http://matteoruina.com/tags/hashicorp/</link>
+    <description>Recent content in Hashicorp on matteoruina.com</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Matteo Ruina</copyright>
+    <lastBuildDate>Thu, 21 Apr 2016 09:20:18 +0100</lastBuildDate>
+    <atom:link href="http://matteoruina.com/tags/hashicorp/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Consul handbook</title>
+      <link>http://matteoruina.com/2016/04/21/consul/</link>
+      <pubDate>Thu, 21 Apr 2016 09:20:18 +0100</pubDate>
+      
+      <guid>http://matteoruina.com/2016/04/21/consul/</guid>
+      <description>
+
+&lt;h2 id=&#34;security:39a67147ef8937e621563cf0fee73cf1&#34;&gt;Security&lt;/h2&gt;
+
+&lt;h3 id=&#34;acl:39a67147ef8937e621563cf0fee73cf1&#34;&gt;ACL&lt;/h3&gt;
+
+&lt;p&gt;The ACL is Capability-based, relying on tokens to which fine grained rules can be applied. It is very similar to AWS IAM in many ways.&lt;/p&gt;
+
+&lt;p&gt;Every token has an ID, name, type, and rule set. The ID is a randomly generated UUID, making it unfeasible to guess. The name is opaque to Consul and human readable. The type is either &amp;ldquo;client&amp;rdquo; (meaning the token cannot modify ACL rules) or &amp;ldquo;management&amp;rdquo; (meaning the token is allowed to perform all actions).&lt;/p&gt;
+
+&lt;p&gt;Enforcement is always done by the server nodes. All servers must be configured to provide an &lt;code&gt;acl_datacenter&lt;/code&gt; which enables ACL enforcement but also specifies the authoritative datacenter. Consul does not replicate data cross-WAN and instead relies on RPC forwarding to support Multi-Datacenter configurations. However, because requests can be made across datacenter boundaries, ACL tokens must be valid globally. To avoid replication issues, a single datacenter is considered authoritative and stores all the tokens.&lt;/p&gt;
+
+&lt;p&gt;When a request is made to a server in a non-authoritative datacenter server, it must be resolved into the appropriate policy. This is done by reading the token from the authoritative server and caching the result for a configurable &lt;code&gt;acl_ttl&lt;/code&gt;. The implication of caching is that the cache TTL is an upper bound on the staleness of policy that is enforced. It is possible to set a zero TTL, but this has adverse performance impacts, as every request requires refreshing the policy via a cross-datacenter WAN call.&lt;/p&gt;
+
+&lt;p&gt;The Consul ACL system is designed with flexible rules to accommodate for an outage of the &lt;code&gt;acl_datacenter&lt;/code&gt; or networking issues preventing access to it. In this case, it may be impossible for servers in non-authoritative datacenters to resolve tokens. Consul provides a number of configurable &lt;code&gt;acl_down_policy&lt;/code&gt; choices to tune behavior. It is possible to deny or permit all actions or to ignore cache TTLs and enter a fail-safe mode. The default is to ignore cache TTLs for any previously resolved tokens and to deny any uncached tokens.&lt;/p&gt;
+
+&lt;p&gt;ACLs can also act in either a whitelist or blacklist mode depending on the configuration of &lt;code&gt;acl_default_policy&lt;/code&gt;. If the default policy is to deny all actions, then token rules can be set to whitelist specific actions. In the inverse, the allow all default behavior is a blacklist where rules are used to prohibit actions. &lt;strong&gt;By default, Consul will allow all actions.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;gossip-encryption:39a67147ef8937e621563cf0fee73cf1&#34;&gt;Gossip encryption&lt;/h3&gt;
+
+&lt;p&gt;The key can be set via the encrypt parameter: the value of this setting is a configuration file containing the encryption key.&lt;/p&gt;
+
+&lt;p&gt;The key must be 16-bytes, Base64 encoded. As a convenience, Consul provides the &lt;code&gt;consul keygen&lt;/code&gt; commmand to generate a key.&lt;br /&gt;
+The key &lt;strong&gt;must&lt;/strong&gt; be used on both servers and clients; this will prevent rogue consul client to join you server cluster.&lt;/p&gt;
+
+&lt;p&gt;The provided key is automatically persisted to the data directory and loaded automatically whenever the agent is restarted. This means that to encrypt Consul&amp;rsquo;s gossip protocol, this option only needs to be provided once on each agent&amp;rsquo;s initial startup sequence. If it is provided after Consul has been initialized with an encryption key, then the provided key is ignored and a warning will be displayed. To enable encryption then, the &lt;code&gt;serf&lt;/code&gt; folder need to be deleted.&lt;/p&gt;
+
+&lt;p&gt;The key is stored in &lt;code&gt;&amp;quot;${CONSUL_DATA_DIR}&amp;quot;/serf/local.keyring&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;tls-encryption:39a67147ef8937e621563cf0fee73cf1&#34;&gt;TLS encryption&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;openssl req -x509 -newkey rsa:2048 -days 3650 -nodes -out ca.cert
+
+[ ca ]
+default_ca = myca
+
+[ myca ]
+unique_subject = no
+new_certs_dir = .
+certificate = ca.cert
+database = certindex
+private_key = privkey.pem
+serial = serial
+default_days = 3650
+default_md = sha1
+policy = myca_policy
+x509_extensions = myca_extensions
+
+[ myca_policy ]
+commonName = supplied
+stateOrProvinceName = supplied
+countryName = supplied
+emailAddress = optional
+organizationName = supplied
+organizationalUnitName = optional
+
+[ myca_extensions ]
+basicConstraints = CA:false
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always
+keyUsage = digitalSignature,keyEncipherment
+extendedKeyUsage = serverAuth,clientAuth
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;troubleshooting:39a67147ef8937e621563cf0fee73cf1&#34;&gt;Troubleshooting&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;Join a cluster with the wrong encryption key&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;==&amp;gt; Starting Consul agent...
+==&amp;gt; Starting Consul agent RPC...
+==&amp;gt; Joining cluster...
+==&amp;gt; EOF
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;sources:39a67147ef8937e621563cf0fee73cf1&#34;&gt;Sources&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.consul.io&#34;&gt;https://www.consul.io&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.mauras.ch/securing-consul.html&#34;&gt;https://www.mauras.ch/securing-consul.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/hashicorp/consul/issues/1013&#34;&gt;https://github.com/hashicorp/consul/issues/1013&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.digitalocean.com/community/tutorials/how-to-secure-consul-with-tls-encryption-on-ubuntu-14-04&#34;&gt;https://www.digitalocean.com/community/tutorials/how-to-secure-consul-with-tls-encryption-on-ubuntu-14-04&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

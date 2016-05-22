@@ -1,8 +1,8 @@
 +++
 date = "2016-05-12T09:20:18+01:00"
 draft = false
-title = "Linux performance and troubleshooting handbook"
-tags = ["linux", "performance", "troubleshooting"]
+title = "AWS performance and troubleshooting handbook"
+tags = ["aws", "performance", "troubleshooting"]
 
 +++
 

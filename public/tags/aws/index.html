@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>GPG &middot; Matteo Ruina</title>
+        <title>Aws &middot; Matteo Ruina</title>
         <meta name="description" content="">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
@@ -57,79 +57,26 @@
             <div id="container">
 
 
-<div class="container">
-    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
-        <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">GPG</h1>
-    
-    <p class="post-date">
-        <span>Published <time datetime="2016-04-13" itemprop="datePublished">Wed, Apr 13, 2016</time></span>
-        <span>by</span>
-        <span itemscope="" itemprop="author" itemtype="http://schema.org/Person">
-            <span itemprop="name">
-                <a href="" itemprop="url" rel="author">Matteo Ruina</a>
-            </span>
-        </span>
-    </p>
-</header>
-
-        <div class="post-content clearfix" itemprop="articleBody">
+<div id="post-index" class="container">
     
 
-    
-
-<h3 id="backup:bb2ce0876885b03bc553b409313dcb30">Backup</h3>
-
-<pre><code class="language-bash">gpg -a --export &quot;${KEY_ID}&quot; &gt; public.key
-gpg -a --export-secret-keys &quot;${KEY_ID}&quot; &gt; private.key
-gpg --export-ownertrust &gt; ownertrust.txt
-</code></pre>
-
-<h3 id="import-private-key:bb2ce0876885b03bc553b409313dcb30">Import private key</h3>
-
-<pre><code class="language-bash">gpg --allow-secret-key-import --import private.key
-</code></pre>
-
-<h3 id="sign-git-commit:bb2ce0876885b03bc553b409313dcb30">Sign git commit</h3>
-
-<p>To set all commits for a repository to be signed by default, in Git versions 2.0.0 and above, run <code>git config commit.gpgsign true</code>. To set all commits in any local repository on your computer to be signed by default, run <code>git config --global commit.gpgsign true</code>.<br />
-To sign a commit run <code>git commit -S -m &quot;${COMMIT_MESSAGE}&quot;</code>.</p>
-
-</div>
-
-        <footer class="post-footer clearfix">
-    
-        <p class="post-tags">
-            <span>Tagged:</span>
-            
-                 <a href="/tags/security/">security</a>
-            
-        </p>
-    
-
-    <div class="share">
-        <a class="icon-twitter" href="http://twitter.com/share?text=GPG&url=http%3a%2f%2fmatteoruina.com%2f2016%2f04%2f13%2fgpg%2f"
-            onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-            <i class="fa fa-twitter"></i>
-            <span class="hidden">Twitter</span>
-        </a>
-
-        <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fmatteoruina.com%2f2016%2f04%2f13%2fgpg%2f"
-            onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-            <i class="fa fa-facebook"></i>
-            <span class="hidden">Facebook</span>
-        </a>
-
-        <a class="icon-google-plus" href="https://plus.google.com/share?url=http%3a%2f%2fmatteoruina.com%2f2016%2f04%2f13%2fgpg%2f"
-           onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-           <i class="fa fa-google-plus"></i>
-            <span class="hidden">Google+</span>
-        </a>
-    </div>
-</footer>
-
+    <ol class="post-list">
         
-    </article>
+        
+            <li class="post-stub">
+    <a href="http://matteoruina.com/2016/05/12/aws-performance/">
+        <h4 class="post-stub-title">AWS performance and troubleshooting handbook</h4>
+        
+        
+    </a>
+</li>
+        
+    </ol>
+
+    <div class="post-navigation">
+        
+
+    </div>
 </div>
 
             </div>
@@ -162,4 +109,3 @@ To sign a commit run <code>git commit -S -m &quot;${COMMIT_MESSAGE}&quot;</code>
         <script src="http://matteoruina.com/js/scripts.js"></script>
     </body>
 </html>
-
