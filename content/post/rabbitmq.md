@@ -37,3 +37,17 @@ Note that nodes will not enter the paused state at startup, even if they are in 
 Also note that RabbitMQ will pause nodes which are not in a strict majority of the cluster - i.e. containing more than half of all nodes. It is therefore not a good idea to enable `pause-minority` mode on a cluster of two nodes since in the event of any network partition or node failure, both nodes will pause. However, `pause_minority` mode is likely to be safer than `ignore` mode for clusters of more than two nodes, especially if the most likely form of network partition is that a single minority of nodes drops off the network.
 
 Finally, note that pause_minority mode will do nothing to defend against partitions caused by cluster nodes being suspended. This is because the suspended node will never see the rest of the cluster vanish, so will have no trigger to disconnect itself from the cluster.
+
+# Performance
+## Basic concepts
+RabbitMQ’s fundamental unit of parallelism for message delivery work is the queue. Other than a partial exception that applies to certain high availability configurations, a RabbitMQ queue is backed by a single Erlang process (a lightweight thread abstraction). As such, a single queue can do no more work per unit time (primarily accepting and delivering messages) than it gets scheduled upon a CPU core to do.  
+
+## Sizing
+**RabbitMQ's queues are fastest when they're empty.** When a queue is empty, and it has consumers ready to receive messages, then as soon as a message is received by the queue, it goes straight out to the consumer. Consequently, the CPU load of a message going through an empty queue is very small.  
+
+If the queue is not empty then a bit more work has to be done: the messages have to actually be queued up. Nevertheless, by holding on to messages, the overall memory usage of the queue will be higher, and we are doing more work than before per message (each message is being both enqueued and dequeued now, whereas before each message was just going straight out to a consumer), so the CPU cost per message is higher. Consequently, the top speed you'll be able to achieve with an empty queue will be higher than the top speed of a queue with a fixed N messages in it, even if N is very small.  
+
+If the queue receives messages at a faster rate than it can pump out to consumers then things get slower. As the queue grows, it will require more memory. Additionally, if a queue receives a spike of publications, then the queue must spend time dealing with those publications, which takes CPU time away from sending existing messages out to consumers: a queue of a million messages will be able to be drained out to ready consumers at a much higher rate if there are no publications arriving at the queue to distract it. Eventually, as a queue grows, it'll become so big that we have to start writing messages out to disk and forgetting about them from RAM in order to free up RAM. At this point, the CPU cost per message is much higher than had the message been dealt with by an empty queue.
+
+# Links
+* [http://www.rabbitmq.com/blog/2011/09/24/sizing-your-rabbits/](http://www.rabbitmq.com/blog/2011/09/24/sizing-your-rabbits/)
